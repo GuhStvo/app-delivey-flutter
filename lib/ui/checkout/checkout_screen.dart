@@ -43,8 +43,7 @@ class CheckoutScreen extends StatelessWidget {
                 children:
                     bagProvider.dishesOnBag.isNotEmpty
                         ? List.generate(
-                          bagProvider.getMapByAmount().keys.length,
-                          (index) {
+                          bagProvider.getMapByAmount().keys.length, (index) {
                             Dish dish =
                                 bagProvider
                                     .getMapByAmount()
