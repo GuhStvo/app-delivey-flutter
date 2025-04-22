@@ -86,36 +86,80 @@ class RestaurantScreen extends StatelessWidget {
                                 style: TextStyle(color: Colors.grey),
                               ),
                               SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {
-                                  context.read<BagProvider>().addAllDishes([
-                                    dish,
-                                  ]);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        '${dish.name} adicionado na sacola!',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                      backgroundColor:
-                                          AppColors.lightBackgroundColor,
-                                    ),
+                              Consumer<BagProvider>(
+                                builder: (context, bagProvider, child) {
+                                  final amount =
+                                      bagProvider.getMapByAmount()[dish] ?? 0;
+                                  return Center(
+                                    child:
+                                        amount == 0
+                                            ? ElevatedButton(
+                                              onPressed: () {
+                                                bagProvider.addAllDishes([
+                                                  dish,
+                                                ]);
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      '${dish.name} adicionado na sacola!',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    duration: Duration(
+                                                      seconds: 2,
+                                                    ),
+                                                    backgroundColor:
+                                                        AppColors
+                                                            .lightBackgroundColor,
+                                                  ),
+                                                );
+                                              },
+                                              child: Text(
+                                                'Adicionar na sacola',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            )
+                                            : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    bagProvider.removeDish(
+                                                      dish,
+                                                    );
+                                                  },
+                                                  child: Icon(Icons.remove),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                      ),
+                                                  child: Text(
+                                                    amount.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    bagProvider.addAllDishes([
+                                                      dish,
+                                                    ]);
+                                                  },
+                                                  child: Icon(Icons.add),
+                                                ),
+                                              ],
+                                            ),
                                   );
                                 },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      'Adicionar na sacola',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
                             ],
                           ),
